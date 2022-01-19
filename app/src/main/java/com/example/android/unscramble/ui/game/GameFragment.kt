@@ -65,6 +65,11 @@ class GameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.gameViewModel = viewModel
+        binding.maxNoOfWords = MAX_NO_OF_WORDS
+        binding.lifecycleOwner = viewLifecycleOwner
+
         Log.d("GameFragment", "onViewCreated")
         // Setup a click listener for the Submit and Skip buttons.
         binding.submit.setOnClickListener { onSubmitWord() }
@@ -76,22 +81,22 @@ class GameFragment : Fragment() {
 //            R.string.word_count, 0, MAX_NO_OF_WORDS
 //        )
 
-        viewModel.score.observe(viewLifecycleOwner,
-            { newScore ->
-                binding.score.text = getString(R.string.score, newScore)
-            })
+//        viewModel.score.observe(viewLifecycleOwner,
+//            { newScore ->
+//                binding.score.text = getString(R.string.score, newScore)
+//            })
         // Observe the currentScrambledWord LiveData.
-        viewModel.currentScrambledWord.observe(viewLifecycleOwner,
-            { newWord ->
-                binding.textViewUnscrambledWord.text = newWord
-            })
-        viewModel.currentWordCount.observe(viewLifecycleOwner,
-            { newWordCount ->
-                binding.wordCount.text = getString(
-                    R.string.word_count, newWordCount, MAX_NO_OF_WORDS
-                )
-
-            })
+//        viewModel.currentScrambledWord.observe(viewLifecycleOwner,
+//            { newWord ->
+//                binding.textViewUnscrambledWord.text = newWord
+//            })
+//        viewModel.currentWordCount.observe(viewLifecycleOwner,
+//            { newWordCount ->
+//                binding.wordCount.text = getString(
+//                    R.string.word_count, newWordCount, MAX_NO_OF_WORDS
+//                )
+//
+//            })
     }
 
     /*
@@ -103,11 +108,12 @@ class GameFragment : Fragment() {
 
         if (viewModel.isUserWordCorrect(playerWord)) {
             setErrorTextField(false)
-            if (viewModel.nextWord()) {
-                showFinalScoreDialog()
-            } else {
+            if (!viewModel.nextWord()) {
                 showFinalScoreDialog()
             }
+//            } else {
+//                showFinalScoreDialog()
+//        }
         } else {
             setErrorTextField(true)
         }
